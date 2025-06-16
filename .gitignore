@@ -1,6 +1,17 @@
-﻿node_modules/
+﻿# Dependências
+node_modules/
+package-lock.json
+
+# Ambiente
 .env
 *.pem
+
+# IDEs
 .idea/
 .vscode/
+
+# Testes
 coverage/
+
+# Sistema
+.DS_Store
