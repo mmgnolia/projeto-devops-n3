@@ -1,0 +1,25 @@
+{
+    "name": "projeto-devops",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest --coverage --verbose",
+        "lint": "eslint src/ tests/",
+        "test:watch": "jest --watch",
+        "start": "node src/server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "express": "^5.1.0"
+    },
+    "devDependencies": {
+        "@types/jest": "^30.0.0",
+        "@types/supertest": "^6.0.3",
+        "eslint": "^9.29.0",
+        "jest": "^30.0.0",
+        "supertest": "^7.1.1"
+    }
+}
