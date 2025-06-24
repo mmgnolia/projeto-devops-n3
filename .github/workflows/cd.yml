@@ -1,34 +1,11 @@
-name: Continuous Deployment
-
-on:
-  push:
-    branches:
-      - main
-      - develop
-
-jobs:
-  deploy:
-    name: Deploy to EC2
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-                  echo "Iniciando deploy na branch: $GITHUB_REF_NAME"
-                  cd /home/ubuntu/projeto-devops-n3 || { echo "ERRO: Diretório não encontrado"; exit 1; }
-                  pwd
-                  ls -la
-                  git fetch --all
-                  git branch -a
-                  git checkout $GITHUB_REF_NAME
-                  git pull origin $GITHUB_REF_NAME
-                  npm install --verbose
-                  pm2 list
-                  pm2 restart all || echo "PM2 restart falhou, tentando start..."
-                  pm2 start index.js --name "projeto-devops" || echo "PM2 start falhou"
-                  echo "Deploy completo!"
+- name: Deploy to EC2
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ubuntu
+    key: ${{ secrets.EC2_SSH_KEY }}
+    script: |
+      cd /home/ubuntu/projeto-devops-n3
+      git pull origin develop
+      npm install --production
+      pm2 restart projeto-n3
