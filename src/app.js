@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('<h1> Bem Vindos! N3 DevOps </h1>');
+  res.send('<h1> Bem Vindos! N3 DevOps :) </h1>');
 });
 
 app.get('/api/status', (req, res) => {
