@@ -7,18 +7,28 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd /home/ubuntu/projeto-devops-n3
-            git pull origin main
-            npm install
-            pm2 restart all
+    - name: Deploy to EC2
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ubuntu
+    key: ${{ secrets.EC2_SSH_KEY }}
+    script: |
+      echo "=== Iniciando deploy ==="
+      cd /home/ubuntu/projeto-devops-n3
+      
+      git fetch --all
+      git reset --hard origin/main
+      
+      # Limpa e instala dependências
+      npm cache clean --force
+      rm -rf node_modules
+      npm ci --production
+      
+      pm2 delete projeto-n3
+      pm2 start src/server.js --name "projeto-n3" --update-env
+      pm2 save
+      
+      # Verificação final
+      echo "Último commit: $(git log -1 --oneline)"
+      echo "Conteúdo atual: $(curl -s http://localhost:3000)"
